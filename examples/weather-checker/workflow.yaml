@@ -1,0 +1,18 @@
+apiVersion: beehive/v1
+kind: Workflow
+metadata:
+  name: beehive-deployment
+  labels:
+    app: mas-example
+spec:
+  strategy:
+    type: sequence
+    output: verbose
+  template:
+    metadata:
+      labels:
+        app: mas-example
+    agents:
+      - name: Current Affairs Bee
+      - name: Hot Or Not Bee
+    prompt: New York
