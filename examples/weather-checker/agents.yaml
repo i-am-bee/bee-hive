@@ -9,6 +9,7 @@ spec:
   description: Get the current weather
   tools:
     - code_interpreter
+    - openmateo
   instructions: Get the current temperature for the location provided by the user. Return results in Fahrenheit.
 
 ---

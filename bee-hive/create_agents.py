@@ -25,13 +25,17 @@ def create_agent(agent):
     agent_model = agent["spec"]["model"]
     agent_desc = agent["spec"]["description"]
     agent_instr = agent["spec"]["instructions"]
-    agent_tool = agent["spec"]["tools"][0]
+    agent_tools = []
+
+    for tool in agent["spec"]["tools"]:
+        if tool == "code_interpreter":
+            agent_tools.append({"type": tool})
 
     assistant = client.beta.assistants.create(
         name=agent_name,
         model=agent_model,
         description=agent_desc,
-        tools=[{"type": agent_tool }],
+        tools=agent_tools,
         instructions=agent_instr
     )
 
