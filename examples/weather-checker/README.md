@@ -12,6 +12,8 @@ A multi-agent workflow using Bee-Hive to check if the current temperature in a l
 
 * Copy `.env` to main bee-hive directory: `cp .env ../../bee-hive`
 
-* Create the agents: `./create-agents.py` -- note you'll need to enable some tools in the UI ( http://localhost:3000 )
+* Create the agents: `./hive create agents.yaml`
 
-* Run the workflow: `./hive workflow.yaml` (to run for a different city, change the `prompt` field in `workflow.yaml`)
+* Open the UI ( http://localhost:3000 ) and enable the `OpenMateo` tool for the `hot-or-not` agent
+
+* Run the workflow: `./hive run workflow.yaml` (to run for a different city, change the `prompt` field in `workflow.yaml`)
