@@ -9,7 +9,7 @@ spec:
   description: Get the current weather
   tools:
     - code_interpreter
-    - openmateo
+    - weather
   instructions: Get the current temperature for the location provided by the user. Return results in Fahrenheit.
 
 ---
@@ -24,4 +24,5 @@ spec:
   description: Is the current temperature hotter than usual?
   tools:
     - code_interpreter
+    - weather
   instructions: The user will give you a temperature in Fahrenheit and a location. Use the OpenMateo weather tool to find the average monthly temperature for the location. Answer if the temperature provided by the user is hotter or colder than the average found by the tool.

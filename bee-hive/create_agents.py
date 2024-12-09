@@ -27,9 +27,13 @@ def create_agent(agent):
     agent_instr = agent["spec"]["instructions"]
     agent_tools = []
 
+    # weather_tool = {"type":"object", "properties":{"location":{"anyOf":[{"type":"object","properties":{"name":{"type":"string", "minLength":1 },"country":{"type":"string" },"language":{"type":"string","default":"English" }},"required":["name"],},{"type":"object","properties":{"latitude":{"type":"number"},"longitude":{"type":"number"}},"required":["latitude","longitude"]}]},"start_date":{"type":"string","format":"date","description":"Start date for the weather forecast in the format YYYY-MM-DD (UTC)"},"end_date":{"type":"string","format":"date","description": "End date for the weather forecast in the format YYYY-MM-DD (UTC)" },"temperature_unit":{"type":"string","enum":["celsius","fahrenheit"],"default":"celsius"}},"required":["location","start_date"]}
+
     for tool in agent["spec"]["tools"]:
         if tool == "code_interpreter":
             agent_tools.append({"type": tool})
+        else:
+            print(f"Enable the {tool} tool in the Bee UI")
 
     assistant = client.beta.assistants.create(
         name=agent_name,
@@ -46,7 +50,7 @@ def create_agents(agents_yaml):
     agent_store = {}
     for agent in agents_yaml:
         agentid = create_agent(agent)
-        print(agentid)
+        print(f"🐝 Created agent {agent['metadata']['name']}: {agentid}")
         agent_store[agent["metadata"]["name"]] = agentid
 
     with open("agent_store.json", "w") as f:
@@ -60,7 +64,6 @@ if __name__ == "__main__":
 
     file_path = sys.argv[1]
     agents_yaml = parse_yaml(file_path)
-    try:
-        create_agents(agents_yaml)
-    except Exception as excep:
-        raise RuntimeError("Unable to create agents") from excep
+    create_agents(agents_yaml)
+    # except Exception as excep:
+    #     raise RuntimeError("Unable to create agents") from excep
