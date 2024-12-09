@@ -10,6 +10,8 @@ A multi-agent workflow using Bee-Hive to check if the current temperature in a l
 
 * Configure environmental variables: `cp example.env .env`
 
+* Copy `.env` to main bee-hive directory: `cp .env ../../bee-hive`
+
 * Create the agents: `./create-agents.py` -- note you'll need to enable some tools in the UI ( http://localhost:3000 )
 
 * Run the workflow: `./hive workflow.yaml` (to run for a different city, change the `prompt` field in `workflow.yaml`)
