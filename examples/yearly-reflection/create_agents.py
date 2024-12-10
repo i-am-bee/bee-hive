@@ -60,6 +60,42 @@ def create_agents():
 
     agent_store[assistant2.name] = assistant2.id
 
+    assistant3 = client.beta.assistants.create(
+        name="Create Dataframe Bee",
+        model="meta-llama/llama-3-1-70b-instruct",
+        description="can you create a dataframe from this file?",
+        instructions="""
+            You will receive a file containing a detailed account of tasks a developer has completed over the past year. Create a dataframe,
+            and for each update (which should be almost always a new sentence), create an entry for that in the dataframe.
+
+            Then, remove any duplicate entries, empty lines, etc.
+            Output a pickle file that I can use to pass in again later.
+            """ )
+    print("Create Dataframe Bee created")
+    print(f"NAME: {assistant3.name}")
+    print(f"ID:  {assistant3.id}")
+    print("Enable Only the Python interpreter for the Create Dataframes Bee")
+    print("\n")
+    agent_store[assistant3.name] = assistant3.id
+
+    # assistant4 = client.beta.assistants.create(
+    #     name="Category Assigner Bee",
+    #     model="meta-llama/llama-3-1-70b-instruct",
+    #     description="can you assign a category for each entry in the dataframe?",
+    #     instructions="""
+    #         You will receive a pickle file containing a dataframe with each entry containing a task a developer has completed over the past year.
+    #         You will also be given a list of categories, like ["cat1","cat2", etc]. Create a new column called category and assign the most relevant 
+    #         category you think to the entry.
+
+    #         Output a pickle file that I can use to pass in again later.
+    #         """ )
+    # print("Category Assigner Bee created")
+    # print(f"NAME: {assistant4.name}")
+    # print(f"ID:  {assistant4.id}")
+    # print("Enable Only the Python interpreter for the Category Assigner Bee")
+    # print("\n")
+    # agent_store[assistant4.name] = assistant4.id
+
     with open("agent_store.json", "w") as f:
         json.dump(agent_store, f)
 
