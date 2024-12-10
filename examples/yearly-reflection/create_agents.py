@@ -42,6 +42,24 @@ def create_agents():
 
     agent_store[assistant1.name] = assistant1.id
 
+    assistant2 = client.beta.assistants.create(
+        name="Generate Categories Bee",
+        model="meta-llama/llama-3-1-70b-instruct",
+        description="can you create a few categories that encapsulate the tasks? + file",
+        instructions="""
+            You will receive a file containing a detailed account of tasks a developer has completed over the past year. Identify about 5-10 overarching categories using the Python Interpreter's counter to identify the most common occuring words, then create categories based on these words that can encapsulate the tasks.
+            Generate new, broad groupings that effectively encompass all the tasks described. Your output should consist solely of the categories you create, and make sure that in the categories created, there aren't duplicated words, otherwise just combine the category.
+            Note:
+            the categories should not be one word, but more so something like 'AI chatbot' or 'bee-hive development' or 'qiskit code assistant'. Something that can encapsulate multiple tasks.
+            """ )
+    print("Generate Categories Bee created")
+    print(f"NAME: {assistant2.name}")
+    print(f"ID:  {assistant2.id}")
+    print("Enable Only the Python interpreter for the Generate Categories Bee")
+    print("\n")
+
+    agent_store[assistant2.name] = assistant2.id
+
     with open("agent_store.json", "w") as f:
         json.dump(agent_store, f)
 
