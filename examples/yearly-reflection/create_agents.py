@@ -78,23 +78,46 @@ def create_agents():
     print("\n")
     agent_store[assistant3.name] = assistant3.id
 
-    # assistant4 = client.beta.assistants.create(
-    #     name="Category Assigner Bee",
-    #     model="meta-llama/llama-3-1-70b-instruct",
-    #     description="can you assign a category for each entry in the dataframe?",
-    #     instructions="""
-    #         You will receive a pickle file containing a dataframe with each entry containing a task a developer has completed over the past year.
-    #         You will also be given a list of categories, like ["cat1","cat2", etc]. Create a new column called category and assign the most relevant 
-    #         category you think to the entry.
+    assistant4 = client.beta.assistants.create(
+        name="Category Assigner Bee",
+        model="meta-llama/llama-3-1-70b-instruct",
+        description="given the categories of ['AI Chatbot', 'Research Development','Demos', and 'Paper Summarizer'] could you assign each entry in the dataframe one of them based on your judgement?",
+        instructions="""
+            Given a pickle file containing a dataframe with each entry representing a task a developer has completed over the past year, Use the list of categories from the prompt query, which will be based like ["cat1","cat2", etc] to MANUALLY ASSIGN each entry in the dataframe to one of the given categories based on your own interpretation, WITHOUT using any tools or Python. Compare the tokens and choose the most similar one out of the given categories. Do not have any unknown values, you must choose one out of the given categories.
+            If there are empty or null entries, you can just remove the entry entirely. You should end up creating a separate column in the dataframe to store your assignment.
+            Output a pickle file that I can use to pass in again later.    
+            """ )
+    print("Category Assigner Bee created")
+    print(f"NAME: {assistant4.name}")
+    print(f"ID:  {assistant4.id}")
+    print("Enable Only the Python interpreter for the Category Assigner Bee, and remove the description as it causes errors.")
+    print("\n")
+    agent_store[assistant4.name] = assistant4.id
 
-    #         Output a pickle file that I can use to pass in again later.
-    #         """ )
-    # print("Category Assigner Bee created")
-    # print(f"NAME: {assistant4.name}")
-    # print(f"ID:  {assistant4.id}")
-    # print("Enable Only the Python interpreter for the Category Assigner Bee")
-    # print("\n")
-    # agent_store[assistant4.name] = assistant4.id
+    assistant5 = client.beta.assistants.create(
+        name="Summary Bee",
+        model="meta-llama/llama-3-1-70b-instruct",
+        description="create the summary for each category in the given file:",
+        instructions="""
+            You will be provided with a dataframe containing two columns, but note that the column names may vary. First, use df.columns to identify the correct column names for:
+
+            The column that describes the tasks a developer has completed over the year.
+            The column that indicates the category assigned to each task/update.
+            Your task is to:
+
+            Group the data frame by the category column (identified in step 1).
+            For each category, generate a written, high-level summary of the tasks in that category by combining your understanding of the listed tasks with tools like DuckDuckGo, Arxiv, Wikipedia to create meaningful summaries that demonstrate the impact of the overall work done with respect to Artifical Intelligence and Quantum Computing within each category. However, do not use the python intepreter for generating the summary, you should do that yourself.
+            The length of each summary should be around 150-200 words.
+
+            Write the grouped summaries into a .txt file, clearly labeling each category and including its generated summary underneath.
+            Ensure the output is organized, with each category followed by its generated summary. Do not simply list the tasks—instead, analyze them to provide a cohesive summary for each category. 
+            """ )
+    print("summary Bee created")
+    print(f"NAME: {assistant5.name}")
+    print(f"ID:  {assistant5.id}")
+    print("Enable all tools except openmateo and readfile for summary bee.")
+    print("\n")
+    agent_store[assistant5.name] = assistant5.id
 
     with open("agent_store.json", "w") as f:
         json.dump(agent_store, f)
