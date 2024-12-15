@@ -84,29 +84,52 @@ def create_agents():
 
     agent_store[assistant2.name] = assistant2.id
 
+
+    agent3_query = """Using the provided file, follow the instructions and answer the questions provided.
+
+Each answer must include exactly three bullet points, each of which is at least three full sentences long (longer is encouraged).
+The tone of the bullet points should be accomplishment-driven and boastful, reflecting the significance of your contributions.
+Every bullet point must provide specific examples of tasks or achievements from the categories of work or tasks identified earlier. Use these examples to highlight accomplishments from the past year. Make sure to answer all the questions!
+
+Key Requirements for Each Bullet Point:
+Describe the task or project and your role in it, emphasizing your ownership, leadership, or creativity.
+Provide examples of the work, including measurable outcomes, whenever possible (e.g., reduced error rates, increased efficiency, improved integration).
+Explain how the task contributes to the company’s broader vision of quantum computing, such as advancing quantum algorithms, enhancing AI integration, or achieving operational efficiency (should focus on this, and can use tools to help).
+
+Additional Notes:
+
+Be precise and data-driven but avoid making up metrics. If measurable outcomes aren’t available, describe the qualitative impact with concrete examples (e.g., fostering collaboration, creating scalable solutions, or overcoming a significant technical challenge).
+Focus on crafting responses that not only showcase accomplishments but also align with strategic goals, presenting your work as indispensable to the company's success."""
+
     assistant3 = client.beta.assistants.create(
         name="Summary Bee",
         model="meta-llama/llama-3-1-70b-instruct",
-        description="create the summary for each category in the given file:",
-        instructions="""
-        You will be provided with a dataframe containing two columns, but note that the column names may vary. First, use df.columns to identify the correct column names for:
+        description="copy description:",
+        instructions="""You will be provided with a dataframe containing two columns, one containing the actual task, the other with the category of the task it is.
 
-        The column that describes the tasks a developer has completed over the year.
-        The column that indicates the category assigned to each task/update.
-        Your task is to:
+Overall, read in the dataframe as context, then use any tools like wikipedia,arXiv (but not necessary) in order to help you determine the most important tasks to answer the following questions specifically in detail. You must answer all these questions in your response, and each response should have 3 bullet points with at least 3 sentences each. So overall, we should have 9 bullet points with multiple sentence reponses.
 
-        Group the data frame by the category column (identified in step 1).
-        For each category, generate a COHERENT, mid-level summary of the tasks in that category by combining your understanding of the listed tasks with tools like DuckDuckGo, Arxiv, Wikipedia to create meaningful summaries that demonstrate the impact of the overall work done with respect to Artifical Intelligence and Quantum Computing within each category. However, do not use the python intepreter for generating the summary, you should do that yourself.
-        The length of each summary should be around 150-200 words.
+(1) Share the top 3 Business Outcomes that were driven through these projects with some detailed explanations.
+(2) Share the top 3 Skills developed and how they were applied in the projects
+(3) Share the top 3 Areas that one can focus on next to continue growth
+Since this is for performance eval, make sure to be specific and have examples to support your answers, show potential value. Have at least 3 sentences per bullet point.
 
-        Write the grouped summaries into a .txt file, clearly labeling each category and including its generated summary underneath.
-        Ensure the output is organized, with each category followed by its generated summary. Do not simply list the tasks—instead, analyze them to provide a cohesive summary for each category. 
-        """ )
+One example output for each of the questions:
+(1) Accelerated Quantum Adoption through support models: 
+Allowing users to have easier time debugging issues in Qiskit and exploring how to convert to post-quantum cryptography.
+
+(2) Retrieval Augmented Generation (allowed me to focus on a specific area, even after data has been trained)
+
+Used RAG to store quantum-specific related documents (which is important because new docs come out every day and we cannot retrain the model). This allows us to access new information, key for new quantum technology.
+ 
+(3) Multi Agent Frameworks
+Continue to work on and see if agents can be used to solve problems, specifically in the quantum space where ibm granite has an advantage. I hope to read more research papers.""" )
     print("summary Bee created")
     print(f"NAME: {assistant3.name}")
     print(f"ID:  {assistant3.id}")
-    print("Enable all tools except openmateo and readfile for summary bee.")
+    print("Enable all tools except duckduckgo, openmateo and readfile for summary bee.")
     print("\n")
+    print(f"Copy this to use as your query: \n {agent3_query}")
     agent_store[assistant3.name] = assistant3.id
 
     with open("agent_store.json", "w") as f:
