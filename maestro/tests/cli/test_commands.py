@@ -38,6 +38,10 @@ class DeployCommand(TestCommand):
                         '--help': False,
                         '--verbose': False,
                         '--version': False,
+                        '--url': "127.0.0.1:5000",
+                        '--k8s': False,
+                        '--kubernetes': False,
+                        '--docker': False,
                         'AGENTS_FILE': self.get_fixture('yamls/agents/simple_agent.yaml'),
                         'SCHEMA_FILE': None,
                         'WORKFLOW_FILE': self.get_fixture('yamls/workflows/simple_workflow.yaml'),
@@ -53,10 +57,29 @@ class DeployCommand(TestCommand):
         self.args = {}
         self.command = None
         
-    def test_deploy__dry_run(self):
+    def test_deploy__dry_run_k8s(self):
         self.assertTrue(self.command.name() == 'deploy')
-        #TODO: complete test for deploy and check deployment server
-        self.assertTrue(self.command.execute() == 0)
+        self.args["--k8s"] = True
+        try:
+            self.assertTrue(self.command.execute() == 0)
+        except Exception as e:
+            self.fail("Exception running command: {message}".format(message=str(e)))
+
+    def test_deploy__dry_run_kubernetes(self):
+        self.assertTrue(self.command.name() == 'deploy')
+        self.args["--kubernetes"] = True
+        try:
+            self.assertTrue(self.command.execute() == 0)
+        except Exception as e:
+            self.fail("Exception running command: {message}".format(message=str(e)))
+
+    def test_deploy__dry_run_docker(self):
+        self.assertTrue(self.command.name() == 'deploy')
+        self.args["--docker"] = True
+        try:
+            self.assertTrue(self.command.execute() == 0)
+        except Exception as e:
+            self.fail("Exception running command: {message}".format(message=str(e)))
 
 # `run` commmand tests
 class RunCommand(TestCommand):

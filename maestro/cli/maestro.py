@@ -29,6 +29,10 @@ Options:
   --verbose                      Show all output.
   --dry-run                      Mocks agents and other parts of workflow execution.
 
+  --url                          The deployment URL, default: 127.0.0.1:5000
+  --k8s | --kubernetes           Deploys to Kubernetes
+  --docker                       Deploys to Docker
+
   -h --help                      Show this screen.
   -v --version                   Show version.
 
@@ -52,7 +56,7 @@ def __execute(command):
         return 1
 
 def __run_cli():
-    args = docopt(__doc__, version='Maestro CLI v0.0.2')
+    args = docopt(__doc__, version='Maestro CLI v0.0.3')
     command = CLI(args).command()
     rc = __execute(command)
     sys.exit(rc)
